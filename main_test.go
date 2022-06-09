@@ -11,6 +11,7 @@ func TestCalculator(t *testing.T) {
 	type tc struct {
 		input          string
 		expectedOutput string
+		expectedError  error
 	}
 	for _, scenario := range []tc{
 		{
@@ -52,7 +53,11 @@ func TestCalculator(t *testing.T) {
 	} {
 		t.Run(scenario.input, func(t *testing.T) {
 			output, err := Evaluate(scenario.input)
-			assert.NoError(t, err, "expected the evaluation to complete successfully")
+			if scenario.expectedError == nil {
+				assert.NoError(t, err, "expected the evaluation to complete successfully")
+			} else {
+				assert.EqualError(t, err, scenario.expectedError.Error())
+			}
 			assert.Equal(t, scenario.expectedOutput, output, fmt.Sprintf("got %s, wanted %s", output, scenario.expectedOutput))
 		})
 	}
