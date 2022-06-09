@@ -34,6 +34,8 @@ func Evaluate(input string) string {
 		result = operands[0] + operands[1]
 	case '-':
 		result = operands[0] - operands[1]
+	default:
+		result = operands[0]
 	}
 
 	return fmt.Sprint(result)
