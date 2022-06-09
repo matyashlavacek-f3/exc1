@@ -14,6 +14,10 @@ func TestCalculator(t *testing.T) {
 	}
 	for _, scenario := range []tc{
 		{
+			input:          "",
+			expectedOutput: "0",
+		},
+		{
 			input:          "42",
 			expectedOutput: "42",
 		},

@@ -9,6 +9,9 @@ import (
 // Evaluate takes in a string representing a mathematical expression
 // and returns the result
 func Evaluate(input string) string {
+	if input == "" {
+		return "0"
+	}
 	acc := ""
 	operands := make([]int, 0)
 	var operator rune
