@@ -21,10 +21,17 @@ func TestAddition(t *testing.T) {
 			input:          "7+2",
 			expectedOutput: "9",
 		},
+		{
+			input:          "70+20",
+			expectedOutput: "90",
+		}, {
+			input:          "50-5",
+			expectedOutput: "45",
+		},
 	} {
 		t.Run(scenario.input, func(t *testing.T) {
 			output := Evaluate(scenario.input)
-			assert.Equal(t, scenario.expectedOutput, output, fmt.Sprintf("expected the result of the addition to be %s", scenario.expectedOutput))
+			assert.Equal(t, scenario.expectedOutput, output, fmt.Sprintf("got %s, wanted %s", output, scenario.expectedOutput))
 		})
 	}
 }

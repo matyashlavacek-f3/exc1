@@ -10,20 +10,30 @@ import (
 // and returns the result
 func Evaluate(input string) string {
 	acc := ""
-	result := 0
+	operands := make([]int, 0)
+	var operator rune
 	for _, c := range input {
 		if unicode.IsDigit(c) {
 			acc = acc + string(c)
 		} else {
 			n := parse(acc)
 			acc = ""
-			result = result + n
+			operands = append(operands, n)
+			operator = c
 		}
 	}
 
 	if acc != "" {
 		n := parse(acc)
-		result = result + n
+		operands = append(operands, n)
+	}
+
+	var result int
+	switch operator {
+	case '+':
+		result = operands[0] + operands[1]
+	case '-':
+		result = operands[0] - operands[1]
 	}
 
 	return fmt.Sprint(result)
