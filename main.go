@@ -18,7 +18,7 @@ func Evaluate(input string) string {
 	for _, c := range input {
 		if unicode.IsDigit(c) {
 			acc = acc + string(c)
-		} else {
+		} else if !unicode.IsSpace(c) {
 			n := parse(acc)
 			acc = ""
 			operands = append(operands, n)
