@@ -14,7 +14,7 @@ func Evaluate(input string) string {
 	}
 	acc := ""
 	operands := make([]int, 0)
-	var operator rune
+	operators := make([]rune, 0)
 	for _, c := range input {
 		if unicode.IsDigit(c) {
 			acc = acc + string(c)
@@ -22,7 +22,7 @@ func Evaluate(input string) string {
 			n := parse(acc)
 			acc = ""
 			operands = append(operands, n)
-			operator = c
+			operators = append(operators, c)
 		}
 	}
 
@@ -31,16 +31,15 @@ func Evaluate(input string) string {
 		operands = append(operands, n)
 	}
 
-	var result int
-	switch operator {
-	case '+':
-		result = operands[0] + operands[1]
-	case '-':
-		result = operands[0] - operands[1]
-	default:
-		result = operands[0]
+	result := operands[0]
+	for i, operator := range operators {
+		switch operator {
+		case '+':
+			result = result + operands[i+1]
+		case '-':
+			result = result - operands[i+1]
+		}
 	}
-
 	return fmt.Sprint(result)
 }
 
