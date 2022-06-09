@@ -44,6 +44,9 @@ func Evaluate(input string) (string, error) {
 func eval(operands []int, operators []rune) int {
 	result := operands[0]
 	for i, operator := range operators {
+		if i+1 == len(operands) {
+			break
+		}
 		switch operator {
 		case '+':
 			result = result + operands[i+1]
