@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAddition(t *testing.T) {
+func TestCalculator(t *testing.T) {
 	type tc struct {
 		input          string
 		expectedOutput string
