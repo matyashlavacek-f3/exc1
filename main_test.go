@@ -19,6 +19,10 @@ func TestCalculator(t *testing.T) {
 			expectedOutput: "0",
 		},
 		{
+			input:         "f",
+			expectedError: fmt.Errorf("expected a number"),
+		},
+		{
 			input:          "42",
 			expectedOutput: "42",
 		},
@@ -55,10 +59,10 @@ func TestCalculator(t *testing.T) {
 			output, err := Evaluate(scenario.input)
 			if scenario.expectedError == nil {
 				assert.NoError(t, err, "expected the evaluation to complete successfully")
+				assert.Equal(t, scenario.expectedOutput, output, fmt.Sprintf("got %s, wanted %s", output, scenario.expectedOutput))
 			} else {
 				assert.EqualError(t, err, scenario.expectedError.Error())
 			}
-			assert.Equal(t, scenario.expectedOutput, output, fmt.Sprintf("got %s, wanted %s", output, scenario.expectedOutput))
 		})
 	}
 }

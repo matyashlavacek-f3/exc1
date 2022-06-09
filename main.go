@@ -58,6 +58,9 @@ func eval(operands []int, operators []rune) int {
 }
 
 func parse(acc string) (int, error) {
+	if acc == "" {
+		return 0, fmt.Errorf("expected a number")
+	}
 	n, err := strconv.Atoi(acc)
 	if err != nil {
 		return 0, fmt.Errorf("parsing input: %w", err)
