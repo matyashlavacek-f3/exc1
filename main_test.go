@@ -47,7 +47,8 @@ func TestCalculator(t *testing.T) {
 		},
 	} {
 		t.Run(scenario.input, func(t *testing.T) {
-			output := Evaluate(scenario.input)
+			output, err := Evaluate(scenario.input)
+			assert.NoError(t, err, "expected the evaluation to complete successfully")
 			assert.Equal(t, scenario.expectedOutput, output, fmt.Sprintf("got %s, wanted %s", output, scenario.expectedOutput))
 		})
 	}

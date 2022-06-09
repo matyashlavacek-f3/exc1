@@ -8,9 +8,9 @@ import (
 
 // Evaluate takes in a string representing a mathematical expression
 // and returns the result
-func Evaluate(input string) string {
+func Evaluate(input string) (string, error) {
 	if input == "" {
-		return "0"
+		return "0", nil
 	}
 	acc := ""
 	operands := make([]int, 0)
@@ -19,7 +19,10 @@ func Evaluate(input string) string {
 		if unicode.IsDigit(c) {
 			acc = acc + string(c)
 		} else if !unicode.IsSpace(c) {
-			n := parse(acc)
+			n, err := parse(acc)
+			if err != nil {
+				return "", err
+			}
 			acc = ""
 			operands = append(operands, n)
 			operators = append(operators, c)
@@ -27,10 +30,18 @@ func Evaluate(input string) string {
 	}
 
 	if acc != "" {
-		n := parse(acc)
+		n, err := parse(acc)
+		if err != nil {
+			return "", err
+		}
 		operands = append(operands, n)
 	}
 
+	result := eval(operands, operators)
+	return fmt.Sprint(result), nil
+}
+
+func eval(operands []int, operators []rune) int {
 	result := operands[0]
 	for i, operator := range operators {
 		switch operator {
@@ -40,13 +51,13 @@ func Evaluate(input string) string {
 			result = result - operands[i+1]
 		}
 	}
-	return fmt.Sprint(result)
+	return result
 }
 
-func parse(acc string) int {
+func parse(acc string) (int, error) {
 	n, err := strconv.Atoi(acc)
 	if err != nil {
-		panic(err)
+		return 0, fmt.Errorf("parsing input: %w", err)
 	}
-	return n
+	return n, nil
 }
