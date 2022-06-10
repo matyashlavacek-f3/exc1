@@ -50,7 +50,10 @@ func Evaluate(input string) (string, error) {
 		operands = append(operands, n*sign)
 	}
 
-	operands, operators = resolvePriorityOps(operands, operators)
+	operands, operators, err := resolvePriorityOps(operands, operators)
+	if err != nil {
+		return "", err
+	}
 
 	result := eval(operands, operators)
 	return fmt.Sprint(result), nil
@@ -60,12 +63,12 @@ func isOperator(c rune) bool {
 	return c == '+' || c == '-' || c == '*' || c == '/'
 }
 
-func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
+func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune, error) {
 	resOperands, resOperators := make([]int, 0), make([]rune, 0)
 	resOperands = append(resOperands, operands[0])
 
 	if len(operands) == 1 {
-		return operands, operators
+		return operands, operators, nil
 	}
 
 	for i, op := range operators {
@@ -76,6 +79,9 @@ func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
 		case '*':
 			resOperands[len(resOperands)-1] = resOperands[len(resOperands)-1] * operands[i+1]
 		case '/':
+			if operands[i+1] == 0 {
+				return resOperands, resOperators, fmt.Errorf("cannot divide by zero")
+			}
 			resOperands[len(resOperands)-1] = resOperands[len(resOperands)-1] / operands[i+1]
 		default:
 			resOperands = append(resOperands, operands[i+1])
@@ -87,7 +93,7 @@ func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
 		resOperands = append(resOperands, operands[len(operands)-1])
 	}
 
-	return resOperands, resOperators
+	return resOperands, resOperators, nil
 }
 
 func eval(operands []int, operators []rune) int {

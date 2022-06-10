@@ -65,9 +65,22 @@ func TestCalculator(t *testing.T) {
 		{
 			input:          "2 + 2 * 5 * 2",
 			expectedOutput: "22",
-		}, {
+		},
+		{
 			input:          "-10",
 			expectedOutput: "-10",
+		},
+		{
+			input:          "5-10",
+			expectedOutput: "-5",
+		},
+		{
+			input:          "5*-10",
+			expectedOutput: "-50",
+		},
+		{
+			input:         "10/0",
+			expectedError: fmt.Errorf("cannot divide by zero"),
 		},
 	} {
 		t.Run(scenario.input, func(t *testing.T) {
