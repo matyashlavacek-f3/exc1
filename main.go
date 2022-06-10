@@ -37,8 +37,37 @@ func Evaluate(input string) (string, error) {
 		operands = append(operands, n)
 	}
 
+	operands, operators = resolvePriorityOps(operands, operators)
+
 	result := eval(operands, operators)
 	return fmt.Sprint(result), nil
+}
+
+func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
+	resOperands, resOperators := make([]int, 0), make([]rune, 0)
+
+	if len(operands) == 1 {
+		return operands, operators
+	}
+
+	for i, op := range operators {
+		if i+1 == len(operands) {
+			break
+		}
+		switch op {
+		case '*':
+			resOperands = append(resOperands, operands[i]*operands[i+1])
+		default:
+			resOperands = append(resOperands, operands[i])
+			resOperators = append(resOperators, operators[i])
+		}
+	}
+
+	if operators[len(operators)-1] == '+' || operators[len(operators)-1] == '-' {
+		resOperands = append(resOperands, operands[len(operands)-1])
+	}
+
+	return resOperands, resOperators
 }
 
 func eval(operands []int, operators []rune) int {
