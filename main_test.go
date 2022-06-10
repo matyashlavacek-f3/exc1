@@ -82,6 +82,14 @@ func TestCalculator(t *testing.T) {
 			input:         "10/0",
 			expectedError: fmt.Errorf("cannot divide by zero"),
 		},
+		{
+			input:          "3/2",
+			expectedOutput: "1.5",
+		},
+		{
+			input:          "1/3",
+			expectedOutput: "0.3333333333333333",
+		},
 	} {
 		t.Run(scenario.input, func(t *testing.T) {
 			output, err := Evaluate(scenario.input)

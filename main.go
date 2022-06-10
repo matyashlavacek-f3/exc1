@@ -16,16 +16,16 @@ func Evaluate(input string) (string, error) {
 
 	input = strings.ReplaceAll(input, " ", "")
 
-	sign := 1
+	sign := 1.0
 	acc := ""
-	operands := make([]int, 0)
+	operands := make([]float64, 0)
 	operators := make([]rune, 0)
 	for i, c := range input {
 		if unicode.IsDigit(c) {
 			acc = acc + string(c)
 		} else if isOperator(c) {
 			if i == 0 || !unicode.IsDigit(rune(input[i-1])) {
-				sign = -1
+				sign = -1.0
 				continue
 			}
 
@@ -36,7 +36,7 @@ func Evaluate(input string) (string, error) {
 			acc = ""
 			operands = append(operands, n*sign)
 			operators = append(operators, c)
-			sign = 1
+			sign = 1.0
 		} else {
 			return "", fmt.Errorf("expected a number")
 		}
@@ -63,8 +63,8 @@ func isOperator(c rune) bool {
 	return c == '+' || c == '-' || c == '*' || c == '/'
 }
 
-func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune, error) {
-	resOperands, resOperators := make([]int, 0), make([]rune, 0)
+func resolvePriorityOps(operands []float64, operators []rune) ([]float64, []rune, error) {
+	resOperands, resOperators := make([]float64, 0), make([]rune, 0)
 	resOperands = append(resOperands, operands[0])
 
 	if len(operands) == 1 {
@@ -96,7 +96,7 @@ func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune, error)
 	return resOperands, resOperators, nil
 }
 
-func eval(operands []int, operators []rune) int {
+func eval(operands []float64, operators []rune) float64 {
 	result := operands[0]
 	for i, operator := range operators {
 		if i+1 == len(operands) {
@@ -112,11 +112,11 @@ func eval(operands []int, operators []rune) int {
 	return result
 }
 
-func parse(acc string) (int, error) {
+func parse(acc string) (float64, error) {
 	if acc == "" {
 		return 0, fmt.Errorf("expected a number")
 	}
-	n, err := strconv.Atoi(acc)
+	n, err := strconv.ParseFloat(acc, 64)
 	if err != nil {
 		return 0, fmt.Errorf("parsing input: %w", err)
 	}
