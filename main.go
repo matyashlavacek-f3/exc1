@@ -21,7 +21,7 @@ func Evaluate(input string) (string, error) {
 	operands := make([]float64, 0)
 	operators := make([]rune, 0)
 	for i, c := range input {
-		if unicode.IsDigit(c) {
+		if unicode.IsDigit(c) || c == '.' {
 			acc = acc + string(c)
 		} else if isOperator(c) {
 			if i == 0 || !unicode.IsDigit(rune(input[i-1])) {
