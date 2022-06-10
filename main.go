@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"unicode"
 )
 
@@ -12,20 +13,32 @@ func Evaluate(input string) (string, error) {
 	if input == "" {
 		return "0", nil
 	}
+
+	input = strings.ReplaceAll(input, " ", "")
+
+	sign := 1
 	acc := ""
 	operands := make([]int, 0)
 	operators := make([]rune, 0)
-	for _, c := range input {
+	for i, c := range input {
 		if unicode.IsDigit(c) {
 			acc = acc + string(c)
-		} else if !unicode.IsSpace(c) {
+		} else if isOperator(c) {
+			if i == 0 || !unicode.IsDigit(rune(input[i-1])) {
+				sign = -1
+				continue
+			}
+
 			n, err := parse(acc)
 			if err != nil {
 				return "", err
 			}
 			acc = ""
-			operands = append(operands, n)
+			operands = append(operands, n*sign)
 			operators = append(operators, c)
+			sign = 1
+		} else {
+			return "", fmt.Errorf("expected a number")
 		}
 	}
 
@@ -34,13 +47,17 @@ func Evaluate(input string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		operands = append(operands, n)
+		operands = append(operands, n*sign)
 	}
 
 	operands, operators = resolvePriorityOps(operands, operators)
 
 	result := eval(operands, operators)
 	return fmt.Sprint(result), nil
+}
+
+func isOperator(c rune) bool {
+	return c == '+' || c == '-' || c == '*' || c == '/'
 }
 
 func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
