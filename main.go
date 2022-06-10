@@ -45,6 +45,7 @@ func Evaluate(input string) (string, error) {
 
 func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
 	resOperands, resOperators := make([]int, 0), make([]rune, 0)
+	resOperands = append(resOperands, operands[0])
 
 	if len(operands) == 1 {
 		return operands, operators
@@ -56,11 +57,11 @@ func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
 		}
 		switch op {
 		case '*':
-			resOperands = append(resOperands, operands[i]*operands[i+1])
+			resOperands[len(resOperands)-1] = resOperands[len(resOperands)-1] * operands[i+1]
 		case '/':
-			resOperands = append(resOperands, operands[i]/operands[i+1])
+			resOperands[len(resOperands)-1] = resOperands[len(resOperands)-1] / operands[i+1]
 		default:
-			resOperands = append(resOperands, operands[i])
+			resOperands = append(resOperands, operands[i+1])
 			resOperators = append(resOperators, operators[i])
 		}
 	}
