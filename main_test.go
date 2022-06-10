@@ -58,6 +58,10 @@ func TestCalculator(t *testing.T) {
 			input:          "2 + 4 * 5",
 			expectedOutput: "22",
 		},
+		{
+			input:          "2 + 10 / 2",
+			expectedOutput: "7",
+		},
 	} {
 		t.Run(scenario.input, func(t *testing.T) {
 			output, err := Evaluate(scenario.input)

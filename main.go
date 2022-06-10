@@ -57,6 +57,8 @@ func resolvePriorityOps(operands []int, operators []rune) ([]int, []rune) {
 		switch op {
 		case '*':
 			resOperands = append(resOperands, operands[i]*operands[i+1])
+		case '/':
+			resOperands = append(resOperands, operands[i]/operands[i+1])
 		default:
 			resOperands = append(resOperands, operands[i])
 			resOperators = append(resOperators, operators[i])
